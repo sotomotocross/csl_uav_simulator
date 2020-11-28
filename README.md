@@ -51,16 +51,16 @@ $ pip install -U scipy matplotlib pillow
 $ pip install -U imutils h5py requests progressbar2
 $ pip install -U scikit-learn scikit-build scikit-image
 $ pip install -U tensorflow-gpu==1.14.0
-& pip install -U keras==2.2.5
+$ pip install -U keras==2.2.5
 $ pip install -U keras-segmentation
 $ pip install -U rospkg empy
 ```
 Now you have to check the import of the keras and tensorflow:
 ```
 $ python
-& >>> import tensorflow
+$ >>> import tensorflow
 $ >>>
-& >>> import keras
+$ >>> import keras
 $ Using TensorFlow backend.
 $ >>>
 $ >>> import keras_segmentation
@@ -100,7 +100,6 @@ Package launching the modified vrx world with an iris quadcopter featuring a ZED
 
 ## Install
 Create a catkin workspace with the following commands: 
-
 ```
 $ cd ~
 $ mkdir -p csl_uav_simulator_ws/src
