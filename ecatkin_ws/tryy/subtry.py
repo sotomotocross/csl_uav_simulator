@@ -73,7 +73,7 @@ class image_converter:
 def main(args):
   
   global mdl
-  mdl = model_from_checkpoint_path("vgg_unet_1")
+  mdl = model_from_checkpoint_path("src/tryy/vgg_unet_1")
   global graph
   graph = tf.get_default_graph()
 
