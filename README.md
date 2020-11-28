@@ -4,11 +4,11 @@ UAV simulator featuring ArduCopter and MAVROS integration
 
 ## Table of contents
 * [Introduction](#introduction)
+* [The ecatkin_ws](#the_ecatkin_ws)
 * [Packages explanation](#packages_explanation)
 * [Install](#install)
 * [Demanding script changes](#demanding_script_changes)
 * [Usage](#usage)
-
 
 
 ## Introduction
@@ -17,6 +17,59 @@ It is developed on Ubuntu 18.04 LTS using ROS Melodic (https://wiki.ros.org/melo
 
 Before continuing with the packages explanation you should have install the ArduPilot/Copter SITL on Linux based on the thread below.
 Setting up SITL on Linux: https://ardupilot.org/dev/docs/setting-up-sitl-on-linux.html
+
+
+## The ecatkin_ws
+This is a ROS workspace consisting of a set of packages running a trained NN for the coastline detection through the ZED stereocamera inside the simulator's synthetic environment.
+This ROS worskpace needs to be build and run using Python3. For this reason the user has to setup a python3 virtual environment and installing a set of dependencies inside.
+Also if you are an NVIDIA user then you have to check the CUDA versions, and cuDNN. Else you will be running the NN prediction on your CPU (either way the payload to the computer is heavy but GPU acceleration helps a lot).
+The basic dependencies for the python3 are installed using the bellow commands:
+```
+$ cd ~
+$ sudo apt update
+$ sudo apt upgrade
+$ sudo apt install build-essential cmake unzip pkg-config
+$ sudo apt install libxmu-dev libxi-dev libglu1-mesa libglu1-mesa-dev
+$ sudo apt install libjpeg-dev libpng-dev libtiff-dev
+$ sudo apt install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
+$ sudo apt install libxvidcore-dev libx264-dev
+$ sudo apt install libgtk-3-dev
+$ sudo apt install libopenblas-dev libatlas-base-dev liblapack-dev gfortran
+$ sudo apt install libhdf5-serial-dev
+$ sudo apt install python3-dev python3-tk python-imaging-tk
+```
+Now we install the python 3 virtual environment:
+```
+$ python3 -m venv /path/to/new/virtual/environment
+$ source /path/to/new/virtual/environment/bin/activate
+```
+Now you have to be inside the virtual environment so you have to install all the pip dependencies:
+```
+$ pip install -U numpy
+$ pip install -U opencv-contrib-python
+$ pip install -U scipy matplotlib pillow
+$ pip install -U imutils h5py requests progressbar2
+$ pip install -U scikit-learn scikit-build scikit-image
+$ pip install -U tensorflow-gpu==1.14.0
+& pip install -U keras==2.2.5
+$ pip install -U keras-segmentation
+$ pip install -U rospkg empy
+```
+Now you have to check the import of the keras and tensorflow:
+```
+$ python
+& >>> import tensorflow
+$ >>>
+& >>> import keras
+$ Using TensorFlow backend.
+$ >>>
+$ >>> import keras_segmentation
+$ >>>
+```
+If everything succesful you can check your python 3 virtual environment running the image-segmentation-keras tutorial (https://github.com/divamgupta/image-segmentation-keras) with the dataset given from the framework. It takes about 4-6 hours (depending on the PC's we have tested till this day) so you can leave at night. If all the predictions are ok then your python 3 virtual environment is ready for use.
+
+The setup of the ecatkin_ws ROS workspace will be given below.
+
 
 ## Packages explanation
 ### ardupilot_gazebo
@@ -43,8 +96,6 @@ Source code: https://github.com/ros-drivers/usb_cam (modifications were made).
 ### iris_coastline
 Package launching the modified vrx world with an iris quadcopter featuring a ZED stereo camera, ArduCopter and MAVROS communications.
 
-### iris_gazebo and iris_navigation
-Packages created for a 2D navigation demo of the quadcopter featuring obstacle avoidance while using the move_base (https://wiki.ros.org/move_base) ROS package and Hokuyo Lidar.
 
 
 ## Install
@@ -85,7 +136,21 @@ $ export GAZEBO_MODEL_PATH=~/ardupilot_gazebo/models_gazebo:${GAZEBO_MODEL_PATH}
 $ export GAZEBO_RESOURCE_PATH=~/ardupilot_gazebo/worlds:${GAZEBO_RESOURCE_PATH}
 $ export GAZEBO_PLUGIN_PATH=~/ardupilot_gazebo/build:${GAZEBO_PLUGIN_PATH}
 ```
-After installing ardupilot_gazebo and testing it continue with the workspace of the simulator:
+After installing ardupilot_gazebo and testing it continue with the setup of the ecatkin_ws:
+```
+$ mkdir -p ~/ecatkins_ws/src
+$ cd ~/ecatkin_ws
+$ catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3 -DPYTHON_INCLUDE_DIR=/usr/include/python3.6 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.6m.so
+```
+Now you can move all the ecatkin_ws content from the repo to the src directory of the ecatkin_ws you just created and build.
+Then you execute the commands below:
+```
+$ cd ~/ecatkin_ws
+$ rosdep install --from-paths src --ignore-src -r -y
+$ catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3 -DPYTHON_INCLUDE_DIR=/usr/include/python3.6 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.6m.so
+$ source devel/setup.bash
+```
+Since the catkin_make of the ecatkin_ws is succesful you can build the simulator:
 ```
 $ cd ~/csl_uav_simulator_ws
 $ rosdep install --from-paths src --ignore-src -r -y
@@ -149,54 +214,14 @@ $ takeoff 3
 ```
 when the quadcopter has been taken off to 3 meters and the teleoperation package is on you can operate the vehicle through your joysticks.
 
-### Obstacle avoidance (2D Navigation)
-Open a terminal and launch an empty world with iris_gazebo
+### NN coastline detection
+While the simulator is running you open a terminal and run the commands below:
 ```
-$ cd ~/csl_uav_simulator_ws
+$ cd ~/ecatkin_ws
 $ source devel/setup.bash
-$ roslaunch iris_gazebo iris_empty_world.launch
+$ source /path/to/new/virtual/environment/bin/activate
+$ rosrun tryy subtry.py
 ```
-open a second terminal and spawn the quadcopter equipped with a Hokuyo Lidar:
-```
-$ cd ~/csl_uav_simulator_ws
-$ source devel/setup.bash
-$ roslaunch iris_gazebo spawn_drone.launch
-```
-open a third terminal and run sitl
-```
-$ cd ~/ardupilot/ArduCopter
-$ ../Tools/autotest/sim_vehicle.py --map --console
-```
-open a fourth terminal and launch mavros:
-```
-$ cd ~/csl_uav_simulator_ws
-$ source devel/setup.bash
-$ roslaunch mavros apm.launch
-```
-open a fifth terminal and launch the move_base package:
-```
-$ cd ~/csl_uav_simulator_ws
-$ source devel/setup.bash
-$ roslaunch iris_navigation move_base.launch
-```
-open a sixth terminal and begin navigation:
-```
-$ cd ~/csl_uav_simulator_ws
-$ source devel/setup.bash
-$ rosrun iris_navigations cmd_vel_to_mavros.py
-```
-open a seventh terminal to run rviz and visualize the navigation of the quadcopter:
-```
-$ rosrun rviz rviz
-```
-In the rviz environment open csl_uav_simualtor/iris_navigation/navigation.rviz.
-Then go to the SITL console and give the commands bellow:
-```
-$ mode GUIDED
-$ arm throttle
-$ takeoff 3
-```
-Then select 2D nav goal, inside the rviz environment.
 
 ### Waves, wind, fog and ambient configuration
 The RobotX-specific behavior of the models and the environment is generated by a set of Gazebo Model Plugins.
