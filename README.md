@@ -164,9 +164,8 @@ Install is complete
 
 Now launch a world file with a copter/rover/plane and ardupilot plugin, and it should work!
 
-## Demanding script changes
+## Demanding script change
 
-### First
 File: iris_coastline.launch
 Inside the iris_coastline package.
 In the line 86 you change the path of the model.sdf launched inside the script
