@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package>
+  <name>gazebo_dvs_plugin</name>
+  <version>0.0.1</version>
+  <description>A basic sensor plugin allowing for efficient DVS approximation and event generation.</description>
+
+  <license>TODO</license>
+
+  <maintainer email="hoff@fzi.de">Michael Hoff</maintainer>
+  <author email="hoff@fzi.de">Michael Hoff</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>gazebo_ros</build_depend>
+  <build_depend>gazebo_plugins</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>dvs_msgs</build_depend>
+  <build_depend>cv_bridge</build_depend>
+
+  <run_depend>gazebo_ros</run_depend>
+  <run_depend>gazebo_plugins</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>dvs_msgs</run_depend>
+  <run_depend>cv_bridge</run_depend>
+
+  <export>
+    <gazebo_ros plugin_path="${prefix}/lib" gazebo_media_path="${prefix}" />
+  </export>
+</package>
