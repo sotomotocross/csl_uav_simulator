@@ -110,6 +110,9 @@ After the the workspace is ready, clone the repository:
 ```
 $ cd ~/csl_uav_simulator_ws/src
 $ git clone https://github.com/sotomotocross/csl_uav_simulator.git
+$ cd csl_uav_simulator/
+$ git clone https://github.com/HBPNeurorobotics/gazebo_dvs_plugin.git
+$ git clone https://github.com/uzh-rpg/rpg_dvs_ros.git
 ```
 Move the ardupilot_gazebo package to the home directory and build it there (cross-check with the Using Gazebo Simulator with SITL documentation given above):
 ```
@@ -149,6 +152,7 @@ $ rosdep install --from-paths src --ignore-src -r -y
 $ catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3 -DPYTHON_INCLUDE_DIR=/usr/include/python3.6 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.6m.so
 $ source devel/setup.bash
 ```
+Go to the rpg_dvs_ros github repo (https://github.com/uzh-rpg/rpg_dvs_ros) and install all the dependencies according to the documentation of the package.
 Since the catkin_make of the ecatkin_ws is succesful you can build the simulator:
 ```
 $ cd ~/csl_uav_simulator_ws
@@ -167,15 +171,7 @@ File: iris_coastline.launch
 Inside the iris_coastline package.
 In the line 86 you change the path of the model.sdf launched inside the script
 ```
-<arg name="sdf_robot_file" default="/home/$USER/ardupilot_gazebo/models/iris_with_ardupilot_and_zed_stereocamera/model.sdf" />
-```
-
-### Second
-File spawn_drone.launch
-Inside the iris_gazebo package.
-In the line 13 change the path for the model.sdf file launched inside the script.
-```
-<arg name="sdf_robot_file" default="/home/sotiris/ardupilot_gazebo/models/iris_with_lidar/model.sdf" /> 
+<arg name="sdf_robot_file" default="/home/$USER/ardupilot_gazebo/models/iris_with_ardupilot_and_zed_stereocamera_and_dvs/model.sdf" />
 ```
 
 ## Usage
