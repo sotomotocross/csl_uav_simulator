@@ -1,0 +1,3 @@
+/usr/lib/x86_64-linux-gnu/gazebo-9/plugins/libArduCopterIRLockPlugin.so
+/usr/lib/x86_64-linux-gnu/gazebo-9/plugins/libArduPilotPlugin.so
+/usr/lib/x86_64-linux-gnu/gazebo-9/plugins/libArduCopterPlugin.so
