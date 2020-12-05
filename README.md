@@ -191,6 +191,7 @@ $ cd ~/csl_uav_simulator_ws/src/csl_uav_simulator/scripts
 $ roslaunch mavros apm.launch
 ```
 These three terminals launch the sandislad world with the iris quadcopter, the SITL (both communication, telemetry, console and map) and the mavros communcations.
+If everyhting are launched succesfuly then you will have topics both from the ZED stereo camera and from the DVS (only one topic that gives events). The DVS has not a body. You will be watching only its field of view.
 
 ### Iris quadcopter teleoperation
 You will need a joystick to launch this package (ideally a Logitech Wireless F710).
