@@ -46,10 +46,10 @@ $ source /path/to/new/virtual/environment/bin/activate
 Now you have to be inside the virtual environment so you have to install all the pip dependencies:
 ```
 $ pip install -U numpy
-$ pip install -U opencv-contrib-python
 $ pip install -U scipy matplotlib pillow
 $ pip install -U imutils h5py==2.10.0 requests progressbar2
 $ pip install -U scikit-learn scikit-build scikit-image
+$ pip install -U opencv-contrib-python
 $ pip install -U tensorflow-gpu==1.14.0
 $ pip install -U keras==2.2.5
 $ pip install -U keras-segmentation
