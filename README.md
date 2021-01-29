@@ -48,13 +48,14 @@ Now you have to be inside the virtual environment so you have to install all the
 $ pip install -U numpy
 $ pip install -U scipy matplotlib pillow
 $ pip install -U imutils h5py==2.10.0 requests progressbar2
-$ pip install -U cython
-$ pip install -U scikit-learn scikit-build scikit-image
-$ pip install -U opencv-contrib-python
-$ pip install -U tensorflow-gpu==1.14.0
-$ pip install -U keras==2.2.5
-$ pip install -U keras-segmentation
-$ pip install -U rospkg empy
+$ pip install cython
+$ pip install scikit-learn scikit-build scikit-image
+$ pip install  opencv-contrib-python==4.4.0.46
+$ pip install tensorflow-gpu==1.14.0
+$ pip install keras==2.2.5
+$ pip install opencv-python==4.4.0.42
+$ pip install keras-segmentation
+$ pip install rospkg empy
 ```
 Now you have to check the import of the keras and tensorflow:
 ```
@@ -143,6 +144,14 @@ After installing ardupilot_gazebo and testing it continue with the setup of the 
 ```
 $ mkdir -p ~/ecatkins_ws/src
 $ cd ~/ecatkin_ws
+$ pip3 install -U numpy
+$ pip3 install -U scipy matplotlib pillow
+$ pip3 install -U imutils h5py==2.10.0 requests progressbar2
+$ pip3 install cython
+$ pip3 install scikit-learn scikit-build scikit-image
+$ pip3 install  opencv-contrib-python==4.4.0.46
+$ pip3 install opencv-python==4.4.0.42
+$ pip3 install rospkg empy
 $ catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3 -DPYTHON_INCLUDE_DIR=/usr/include/python3.6 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.6m.so
 ```
 Now you can move all the ecatkin_ws content from the repo to the src directory of the ecatkin_ws you just created and build.
