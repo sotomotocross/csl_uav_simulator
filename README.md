@@ -38,10 +38,14 @@ $ sudo apt install libopenblas-dev libatlas-base-dev liblapack-dev gfortran
 $ sudo apt install libhdf5-serial-dev
 $ sudo apt install python3-dev python3-tk python-imaging-tk
 ```
-Now we install the python 3 virtual environment:
+After installing the dependencies you have to install Anaconda 3 (https://docs.anaconda.com/anaconda/install/linux/) for the Ubuntu 18.04 version.
+After the Anaconda installation you create an anaconda virtual environment with the following terminal commands:
 ```
-$ python3 -m venv /path/to/new/virtual/environment
-$ source /path/to/new/virtual/environment/bin/activate
+$ source ~/anaconda3/etc/profile.d/conda.sh
+$ conda create -n tf-gpu-cuda10 tensorflow-gpu=1.14 cudatoolkit=10.0 python=3.6
+$ conda activate tf-gpu-cuda10
+$ conda install -c conda-forge keras=2.2.5
+$ pip install keras-segmentation
 ```
 Now you have to be inside the virtual environment so you have to install all the pip dependencies:
 ```
@@ -120,7 +124,7 @@ Move the ardupilot_gazebo package to the home directory and build it there (cros
 ```
 $ cd csl_uav_simulator/
 $ mv ardupilot_gazebo/ /home/$USER/
-$ cd ~/adupilot_gazebo/
+$ cd ~/ardupilot_gazebo/
 $ mkdir build
 $ cd build
 $ cmake ..
@@ -149,7 +153,7 @@ $ pip3 install -U scipy matplotlib pillow
 $ pip3 install -U imutils h5py==2.10.0 requests progressbar2
 $ pip3 install cython
 $ pip3 install scikit-learn scikit-build scikit-image
-$ pip3 install  opencv-contrib-python==4.4.0.46
+$ pip3 install opencv-contrib-python==4.4.0.46
 $ pip3 install opencv-python==4.4.0.42
 $ pip3 install rospkg empy
 $ catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3 -DPYTHON_INCLUDE_DIR=/usr/include/python3.6 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.6m.so
@@ -169,6 +173,9 @@ $ cd ~/csl_uav_simulator_ws
 $ rosdep install --from-paths src --ignore-src -r -y
 $ catkin_make
 $ source devel/setup.bash
+$ cd src/csl_uav_simulator_ws/src/csl_uav_simulator/mavros/mavros/scripts
+$ ./install_geographiclib_datasets.sh
+$ cd ~/cs_uav_simulator_ws
 ```
 Install is complete
 
