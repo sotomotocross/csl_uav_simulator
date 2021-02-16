@@ -13,6 +13,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 from keras_segmentation.predict import predict
 from keras_segmentation.predict import model_from_checkpoint_path
+from tryy.msg import PREDdata
 
 red = (153, 0, 18)
 dim=(720, 480) 
@@ -22,6 +23,7 @@ class image_converter:
   def __init__(self):
     self.image_pub_first_image = rospy.Publisher("/image_raww",Image,queue_size=10)
     self.image_pub_second_image = rospy.Publisher("/image_raww_comb", Image, queue_size=10)
+    self.pub_pred_data = rospy.Publisher("/pred_data", PREDdata, queue_size=1000)
     self.bridge = CvBridge()
     self.image_sub = rospy.Subscriber("/iris_demo/ZED_stereocamera/camera/left/image_raw",Image,self.callback) 
 
@@ -58,25 +60,30 @@ class image_converter:
     copy_mask=cv2.bitwise_and(copy_mask,red_mask)
     combo_image=cv2.addWeighted(copy_image, 1, copy_mask,1 ,1)
 
-    # mask = cv2.inRange(segimg, (130, 130, 130), (255, 255, 255))
-    # kernel = np.ones((1, 1), np.uint8)
-    # mask = cv2.erode(mask, kernel, iterations=3)
-    # mask = cv2.dilate(mask, kernel, iterations=3)
-    # contours_blk, hierarchy = cv2.findContours(mask.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    mask = cv2.inRange(segimg, (130, 130, 130), (255, 255, 255))
+    kernel = np.ones((1, 1), np.uint8)
+    mask = cv2.erode(mask, kernel, iterations=3)
+    mask = cv2.dilate(mask, kernel, iterations=3)
+    contours_blk, hierarchy = cv2.findContours(mask.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # print("contours: ", contours_blk)
-    # contours_blk.sort(key=cv2.minAreaRect)
-    # blackbox = cv2.minAreaRect(contours_blk[0])
-    # (x_min, y_min), (w_min, h_min), angle = blackbox
-    # box = cv2.boxPoints(blackbox)
-    # box = np.int0(box)
+    contours_blk.sort(key=cv2.minAreaRect)
+    blackbox = cv2.minAreaRect(contours_blk[0])
+    (x_min, y_min), (w_min, h_min), angle = blackbox
+    box = cv2.boxPoints(blackbox)
+    box = np.int0(box)
     # print("1st point of box: ", box[0][:])
     # print("2nd point of box: ", box[1][:])
     # print("3rd point of box: ", box[2][:])
     # print("4th point of box: ", box[3][:]) 
 
-    
-    # cv2.imshow("Combined prediction",combo_image)    
-    # cv2.imshow("Prediction image window", segimg)    
+    pred_data = PREDdata()
+    pred_data.box_1 = box[0][:]
+    pred_data.box_2 = box[1][:]
+    pred_data.box_3 = box[2][:]
+    pred_data.box_4 = box[3][:]
+    self.pub_pred_data.publish(pred_data)
+    # cv2.imshow("Combined prediction", combo_image)
+    # cv2.imshow("Prediction image window", segimg)   
     cv2.waitKey(3)
 
     try:
@@ -88,6 +95,13 @@ class image_converter:
 
 
 def main(args):
+      
+  config = tf.ConfigProto()
+  config.gpu_options.allow_growth = True
+  sess = tf.Session(config = config)
+
+  # Check available GPU devices.
+  print("The following GPU devices are available: %s" % tf.test.gpu_device_name())
   
   global mdl
   mdl = model_from_checkpoint_path("src/tryy/model_checkpoints/vgg_unet_1")

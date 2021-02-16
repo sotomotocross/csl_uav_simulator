@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/sotiris/ROS_workspaces/ecatkin_ws/devel/setup.sh

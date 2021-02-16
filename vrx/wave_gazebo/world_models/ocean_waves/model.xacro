@@ -25,9 +25,9 @@
 
 
 <world xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:macro name="ocean_waves" params="gain:=0.1 period:=5
+  <xacro:macro name="ocean_waves" params="gain:=1.0 period:=5
                      direction_x:=1.0 direction_y:=0.0
-                     angle:=0.4 scale:=1.5">
+                     angle:=0.4 scale:=1.06">
   <model name='ocean_waves'>
     <static>true</static>
     <plugin name="wavefield_plugin" filename="libWavefieldModelPlugin.so">

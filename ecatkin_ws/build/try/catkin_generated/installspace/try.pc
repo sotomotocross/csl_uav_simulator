@@ -1,0 +1,8 @@
+prefix=/home/sotiris/ROS_workspaces/ecatkin_ws/install
+
+Name: try
+Description: Description of try
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
