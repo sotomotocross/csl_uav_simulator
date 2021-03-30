@@ -1,0 +1,7 @@
+<sdf version="1.4">
+  <world name="default">
+    <include>
+      <uri>model://winding_valley_heightmap</uri>
+    </include>
+  </world>
+</sdf>

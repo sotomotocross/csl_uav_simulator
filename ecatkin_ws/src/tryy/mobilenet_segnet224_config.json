@@ -1,1 +1,0 @@
-{"model_class": "mobilenet_segnet", "n_classes": 2, "input_height": 224, "input_width": 224, "output_height": 112, "output_width": 112}

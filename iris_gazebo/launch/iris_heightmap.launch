@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <arg name="x" default="-15"/>
+  <arg name="y" default="9.32"/>
+  <arg name="z" default="-0.5"/>
+
+  <include file="$(find iris_gazebo)/launch/heightmap.launch" />
+  <include file="$(find iris_gazebo)/launch/spawn_drone.launch">
+    <arg name="x" value="$(arg x)"/>
+    <arg name="y" value="$(arg y)"/>
+    <arg name="z" value="$(arg z)"/>
+  </include>
+
+  <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0 0 0.03 0 0 0 1 base_link hokuyo 100" />
+
+
+  <!-- <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0.14 0 -0.055 0 0 0 1 base_link iris_demo/left_camera_optical_frame 100" /> 
+
+  <node ns="iris_demo/ZED_stereocamera/camera" pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc" output="screen">
+    <param name="approximate_sync" value="true"/>
+    <param name="queue_size" value="20"/>
+  </node> -->
+
+
+
+  <!-- <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan">
+
+      <remap from="cloud_in" to="/iris_demo/ZED_stereocamera/camera/points2"/>
+      <remap from="scan" to="/scan"/>
+      <rosparam>
+          transform_tolerance: 0.01
+          min_height: 0.0
+          max_height: 1.0
+
+          angle_min: -1.5708 # -M_PI/2
+          angle_max: 1.5708 # M_PI/2
+          angle_increment: 0.0087 # M_PI/360.0
+          scan_time: 0.3333
+          range_min: 0.45
+          range_max: 4.0
+          use_inf: true
+
+          # Concurrency level, affects number of pointclouds queued for processing and number of threads used
+          # 0 : Detect number of cores
+          # 1 : Single threaded
+          # 2->inf : Parallelism level
+          concurrency_level: 1
+      </rosparam>
+
+  </node> -->
+
+</launch>

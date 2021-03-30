@@ -1,8 +1,0 @@
-prefix=/home/sotiris/ROS_workspaces/ecatkin_ws/install
-
-Name: tryy
-Description: Description of tryy
-Version: 0.0.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: cv_bridge geometry_msgs rospy sensor_msgs std_msgs message_runtime
